@@ -1,9 +1,10 @@
 import os
 import time
+import re
 import pandas as pd
 import logging
 from logging.handlers import RotatingFileHandler
-from datetime import date, time as dt_time
+from datetime import datetime
 from typing import List, Dict, Optional, Tuple
 
 from selenium import webdriver
@@ -35,8 +36,8 @@ def generate_google_flights_url(
         origin: str, 
         dest: str, 
         depature_date: str, 
-        return_date: str | None, 
-        one_way: bool = False
+        return_date: str | None = None, 
+        one_way: bool = True
         ) -> tuple[str, str]:
     """
     Docstring for generate_google_flights_url
@@ -47,31 +48,24 @@ def generate_google_flights_url(
     :type dest: str
     :param depature_date: Departure date
     :type depature_date: date
-    :param return_date: Return date
+    :param return_date: Return date, default None
     :type return_date: date | None
-    :param one_way: one way trip if True, defaults to False
+    :param one_way: one way trip if True, defaults to True
     :return: url string for Google Flights search
     :rtype: str
     """
 
     if one_way or return_date is None:
-        query = f"Flights to {dest} from {origin} on {depature_date} oneway"
+        query = f"Flights to {dest} from {origin} on {depature_date} oneway non-stop"
     else:
-        query = f"Flights to {dest} from {origin} on {depature_date} return {return_date}"
+        query = f"Flights to {dest} from {origin} on {depature_date} return {return_date} non-stop"
     
     # URL encode the spaces to %20
     encoded_query = query.replace(" ", "%20")
     return f"https://www.google.com/travel/flights?q={encoded_query}", encoded_query
 
 
-def scrape_google_flights(
-        url: str, 
-        departure_date: str,
-        return_date: Optional[str],
-        cheapest_flights_option: bool = True, 
-        more_flights: bool = False
-    ) -> List[Dict]:
-    
+def scrape_google_flights(url: str) -> pd.DataFrame:
     chrome_options = Options()
     chrome_options.page_load_strategy = 'eager'
     chrome_options.add_argument("--headless")
@@ -95,8 +89,6 @@ def scrape_google_flights(
         
     driver.set_page_load_timeout(60)
     
-    flights_data = []
-    
     try:
         logger.info(f"Scraping URL: {url}")
         driver.get(url)
@@ -113,7 +105,7 @@ def scrape_google_flights(
 
         # B. POP-UP KILLER (Recommended Flights / Tips)
         try:
-            time.sleep(1) # Small pause for animations
+            time.sleep(2) # Small pause for animations
             driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ESCAPE)
             
             pop_up_xpath = "//button[contains(., 'Got it') or contains(., 'Verstanden') or contains(., 'Done')]"
@@ -124,140 +116,101 @@ def scrape_google_flights(
         except Exception:
             pass
 
-        # C. SORT BY CHEAPEST
-        if cheapest_flights_option:
-            try:
-                cheapest_btn = wait.until(EC.element_to_be_clickable((By.ID, "M7sBEb")))
-                cheapest_btn.click()
-                time.sleep(2)
-            except Exception:
-                logger.warning("Could not click 'Cheapest' button.")
+        # C. CLICK DEPARTURE INPUT
+        try:
+            departure_input = wait.until(EC.element_to_be_clickable((By.XPATH, "//input[@placeholder='Departure']")))
+            departure_input.click()
+            logger.info("'Departure' input clicked.")
+        except Exception:
+            logger.warning("Could not click 'Departure' input.")
 
-        # D. VIEW MORE
-        if more_flights:
+        # D. EXTRACT PRICES FROM CALENDER
+        logger.info("Executing 10 clicks for all months to load...")
+        for i in range(10):
             try:
-                view_more = driver.find_elements(By.CSS_SELECTOR, "li.ZVk93d")
-                if view_more:
-                    view_more[0].click()
-                    time.sleep(2)
-            except Exception:
+                # Use a short wait to ensure the button is ready for the next click
+                next_btn = wait.until(
+                    EC.element_to_be_clickable((By.CSS_SELECTOR, "button[jsname='KpyLEe']"))
+                )
+                driver.execute_script("arguments[0].click();", next_btn)
+                # Small buffer to prevent the browser from freezing
+                time.sleep(1) 
+            except Exception as e:
+                logger.warning(f"Stopped at click {i+1}: {e}")
+                break
+
+        # Give the final view a moment to load prices for the current months
+        logger.info("Clicks finished. Waiting for final render...")
+        time.sleep(3)
+
+        # 3. Scrape EVERYTHING currently in the HTML
+        all_elements = driver.find_elements(By.CSS_SELECTOR, "div[role='gridcell'][data-iso]")
+        logger.info(f"Total elements found in HTML: {len(all_elements)}")
+
+        results = []
+        for cell in all_elements:
+            # We ignore aria-hidden here to see 'ghost' elements too
+            date_iso = cell.get_attribute("data-iso")
+            price = None
+            
+            try:
+                # Look for the price div
+                price_el = cell.find_element(By.CSS_SELECTOR, "div[jsname='qCDwBb']")
+                price_label = price_el.get_attribute("aria-label")
+                if price_label:
+                    digits = re.sub(r'\D', '', price_label)
+                    if digits:
+                        price = int(digits)
+            except:
                 pass
+            
+            results.append({"departure_date": date_iso, "price": price})
 
-        # E. DATA EXTRACTION
-        flight_elements = wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "li.pIav2d")))
+        # 4. Analyze what we found
+        df = pd.DataFrame(results)
+        # Sort by date to see the range we actually captured
+        df = df.sort_values('departure_date').drop_duplicates(subset=['departure_date'])
 
-        for flight in flight_elements:
-            try:
-                airline = flight.find_element(By.CSS_SELECTOR, ".sSHqwe").text
-                duration = flight.find_element(By.CSS_SELECTOR, ".gvkrdb").text
-                price_text = flight.find_element(By.CSS_SELECTOR, ".FpEdX span").text
-                
-                # Robust price cleaning
-                price = int(''.join(filter(str.isdigit, price_text)))
-
-                stops_text = flight.find_element(By.CSS_SELECTOR, ".EfT7Ae").text
-                stops = 0 if "Nonstop" in stops_text else int(stops_text.split(" ")[0])
-
-                flights_data.append({
-                    "airline": airline,
-                    "departure_date": departure_date,
-                    "return_date": return_date,
-                    "price": price,
-                    "duration": duration,
-                    "stops": stops,
-                    "scraped_at": pd.Timestamp.now()
-                })
-            except Exception:
-                continue 
-
-        logger.info(f"Found {len(flights_data)} flights.")
-        return flights_data
+        return df
 
     except Exception as e:
         logger.error(f"Critical error during scrape: {e}")
-        return []
+        return pd.DataFrame(columns=['departure_date', 'price'])
     finally:
         driver.quit()
 
 
-def flight_data_filter(flights_data: list[dict], 
-                       max_stops: int | None = None, 
-                       max_duration: dt_time | None = None,
-                       top_n: int | None = None
-                       ) -> list[dict]:
-    filtered_data = []
+def edit_flight_data(df: pd.DataFrame) -> pd.DataFrame:
+    df['departure_date'] = pd.to_datetime(df['departure_date'])
+    df['scraped_at'] = datetime.now().strftime('%Y-%m-%d')
 
-    for flight in flights_data:
-        stops = flight.get("stops", "")
-        duration_str = flight.get("duration", "")
-
-        # Filter by max_stops
-        if max_stops is not None:
-            try:
-                if stops > max_stops:
-                    continue
-            except:
-                continue  # Unable to parse stops, skip this flight
-
-        # Filter by max_duration
-        if max_duration is not None:
-            try:
-                hours, minutes = 0, 0
-                if 'h' in duration_str:
-                    hours = int(duration_str.split(' ')[0].strip())
-                    duration_str = duration_str.split('hr ')[1].strip()
-                if 'm' in duration_str:
-                    minutes = int(duration_str.split(' ')[0].strip())
-                total_duration = dt_time(hour=hours, minute=minutes)
-                if total_duration > max_duration:
-                    continue
-            except:
-                continue  # Unable to parse duration, skip this flight
-
-        filtered_data.append(flight)
-
-    return filtered_data[:top_n] if top_n is not None else filtered_data
+    return df
 
 
-def get_flight_data(
+def get_flight_route_data(
         origin: str, 
         dest: str, 
         depature_date: str, 
-        return_date: str | None, 
-        one_way: bool = False,
-        cheapest_flights_option: bool = False,
-        more_flights: bool = False,
-        max_stops: int | None = None, 
-        max_duration: dt_time | None = None,
-        top_n: int | None = None
-        ) -> list[dict]:
+        return_date: str | None = None, 
+        one_way: bool = True,
+        ) -> pd.DataFrame:
     
     url, _ = generate_google_flights_url(origin, dest, depature_date, return_date, one_way)
-    data = scrape_google_flights(url, depature_date, return_date, cheapest_flights_option, more_flights)
-    return flight_data_filter(data, max_stops, max_duration, top_n)
+    data = scrape_google_flights(url)
+    return edit_flight_data(data)
 
 
 def main():
     # Simple test run
-    # Example: Search VIE (IVienna) to LHR (London Heathrow) from 2026-01-01 to 2026-01-10
-    search_url, encoded_query = generate_google_flights_url("VIE", "LHR", "2026-01-01", "2026-01-10")
+    # Example: Search Vienna to Agadir
+    date_today = datetime.now().strftime('%Y-%m-%d')
+    search_url, encoded_query = generate_google_flights_url("Vienna", "Agadir", date_today)
 
-    data = scrape_google_flights(search_url, "2026-01-01", "2026-01-10", cheapest_flights_option=True, more_flights=True)
+    df = scrape_google_flights(search_url)
+    df = edit_flight_data(df)
 
-    # for flight in data:
-    #     print(flight)
-
-    filtered_flights = flight_data_filter(data, max_stops=1, max_duration=dt_time(hour=5, minute=0))
-
-    # print("Filtered Flights:")
-    # for flight in filtered_flights:
-    #     print(flight)
-
-    # 4. Save to CSV for your Databank
-    if filtered_flights:
-        df = pd.DataFrame(filtered_flights)
-        df.to_csv(f"flight_prices_{encoded_query}.csv", mode='a', index=False, header=not os.path.isfile(f"flight_prices_{encoded_query}.csv"))
-        logger.info(f"Saved {len(df)} flights to csv.")
+    df.to_csv(f"flight_prices_{encoded_query}.csv", mode='a', index=False, header=not os.path.isfile(f"flight_prices_{encoded_query}.csv"))
+    logger.info(f"Saved {len(df)} flights to csv.")
 
 
 if __name__ == "__main__":

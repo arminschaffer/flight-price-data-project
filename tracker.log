@@ -1,0 +1,64 @@
+2026-01-12 14:05:39,225 - INFO - Run price tracker once...
+2026-01-12 14:05:39,225 - INFO - === Starting flight price data accumulation ===
+2026-01-12 14:05:39,225 - INFO - Start search for Vienna -> Agadir...
+2026-01-12 14:05:39,257 - INFO - New search created (ID: 1).
+2026-01-12 14:06:01,137 - ERROR - Scheduled task failed: 'date'
+2026-01-12 14:06:46,925 - INFO - Run price tracker once...
+2026-01-12 14:06:46,925 - INFO - === Starting flight price data accumulation ===
+2026-01-12 14:06:46,925 - INFO - Start search for Vienna -> Agadir...
+2026-01-12 14:06:46,934 - INFO - Search found in DB (ID: 1).
+2026-01-12 14:07:08,129 - ERROR - Scheduled task failed: (sqlite3.IntegrityError) NOT NULL constraint failed: price_time_series.price
+[SQL: INSERT INTO price_time_series (departure_date, price, scraped_at, search_id) VALUES (?, ?, ?, ?)]
+[parameters: [('2026-01-01 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-02 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-03 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-04 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-05 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-06 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-07 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-08 00:00:00.000000', None, '2026-01-12', 1)  ... displaying 10 of 365 total bound parameter sets ...  ('2026-12-30 00:00:00.000000', None, '2026-01-12', 1), ('2026-12-31 00:00:00.000000', None, '2026-01-12', 1)]]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-01-12 14:08:53,800 - INFO - Run price tracker once...
+2026-01-12 14:08:53,800 - INFO - === Starting flight price data accumulation ===
+2026-01-12 14:08:53,800 - INFO - Start search for Vienna -> Agadir...
+2026-01-12 14:08:53,808 - INFO - Search found in DB (ID: 1).
+2026-01-12 14:09:14,932 - ERROR - Scheduled task failed: (sqlite3.IntegrityError) NOT NULL constraint failed: price_time_series.price
+[SQL: INSERT INTO price_time_series (departure_date, price, scraped_at, search_id) VALUES (?, ?, ?, ?)]
+[parameters: [('2026-01-01 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-02 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-03 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-04 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-05 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-06 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-07 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-08 00:00:00.000000', None, '2026-01-12', 1)  ... displaying 10 of 365 total bound parameter sets ...  ('2026-12-30 00:00:00.000000', None, '2026-01-12', 1), ('2026-12-31 00:00:00.000000', None, '2026-01-12', 1)]]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-01-12 14:10:51,232 - INFO - Run price tracker once...
+2026-01-12 14:10:51,232 - INFO - === Starting flight price data accumulation ===
+2026-01-12 14:10:51,232 - INFO - Start search for Vienna -> Agadir...
+2026-01-12 14:10:51,241 - INFO - Search found in DB (ID: 1).
+2026-01-12 14:11:12,809 - ERROR - Scheduled task failed: (sqlite3.IntegrityError) NOT NULL constraint failed: price_time_series.price
+[SQL: INSERT INTO price_time_series (departure_date, price, scraped_at, search_id) VALUES (?, ?, ?, ?)]
+[parameters: [('2026-01-01 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-02 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-03 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-04 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-05 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-06 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-07 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-08 00:00:00.000000', None, '2026-01-12', 1)  ... displaying 10 of 365 total bound parameter sets ...  ('2026-12-30 00:00:00.000000', None, '2026-01-12', 1), ('2026-12-31 00:00:00.000000', None, '2026-01-12', 1)]]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-01-12 14:12:48,499 - INFO - Run price tracker once...
+2026-01-12 14:12:48,500 - INFO - === Starting flight price data accumulation ===
+2026-01-12 14:12:48,500 - INFO - Start search for Vienna -> Agadir...
+2026-01-12 14:12:48,507 - INFO - Search found in DB (ID: 1).
+2026-01-12 14:13:09,853 - ERROR - Scheduled task failed: (sqlite3.IntegrityError) NOT NULL constraint failed: price_time_series.price
+[SQL: INSERT INTO price_time_series (departure_date, price, scraped_at, search_id) VALUES (?, ?, ?, ?)]
+[parameters: [('2026-01-01 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-02 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-03 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-04 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-05 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-06 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-07 00:00:00.000000', None, '2026-01-12', 1), ('2026-01-08 00:00:00.000000', None, '2026-01-12', 1)  ... displaying 10 of 365 total bound parameter sets ...  ('2026-12-30 00:00:00.000000', None, '2026-01-12', 1), ('2026-12-31 00:00:00.000000', None, '2026-01-12', 1)]]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2026-01-12 14:13:56,921 - INFO - Run price tracker once...
+2026-01-12 14:13:56,921 - INFO - === Starting flight price data accumulation ===
+2026-01-12 14:13:56,922 - INFO - Start search for Vienna -> Agadir...
+2026-01-12 14:13:56,954 - INFO - New search created (ID: 1).
+2026-01-12 14:14:18,449 - INFO - Completed search for Vienna -> Agadir.
+2026-01-12 14:14:18,449 - INFO - Start search for Vienna -> Stockholm...
+2026-01-12 14:14:18,473 - INFO - New search created (ID: 2).
+2026-01-12 14:14:40,066 - INFO - Completed search for Vienna -> Stockholm.
+2026-01-12 14:14:40,066 - INFO - Flight price accumulation run completed.
+2026-01-12 14:18:12,720 - INFO - Run price tracker once...
+2026-01-12 14:18:12,721 - INFO - === Starting flight price data accumulation ===
+2026-01-12 14:18:12,721 - INFO - Start search for Vienna -> Agadir...
+2026-01-12 14:18:12,754 - INFO - New search created (ID: 1).
+2026-01-12 14:18:34,126 - INFO - Completed search for Vienna -> Agadir.
+2026-01-12 14:18:34,126 - INFO - Start search for Vienna -> Stockholm...
+2026-01-12 14:18:34,150 - INFO - New search created (ID: 2).
+2026-01-12 14:18:55,420 - INFO - Completed search for Vienna -> Stockholm.
+2026-01-12 14:18:55,420 - INFO - Flight price accumulation run completed.
+2026-01-12 14:20:39,591 - INFO - Run price tracker once...
+2026-01-12 14:20:39,592 - INFO - === Starting flight price data accumulation ===
+2026-01-12 14:20:39,592 - INFO - Start search for Vienna -> Agadir...
+2026-01-12 14:20:39,626 - INFO - New search created (ID: 1).
+2026-01-12 14:21:03,052 - INFO - Completed search for Vienna -> Agadir.
+2026-01-12 14:21:03,052 - INFO - Start search for Vienna -> Stockholm...
+2026-01-12 14:21:03,076 - INFO - New search created (ID: 2).
+2026-01-12 14:21:26,328 - INFO - Completed search for Vienna -> Stockholm.
+2026-01-12 14:21:26,328 - INFO - Flight price accumulation run completed.
