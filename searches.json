@@ -1,10 +1,127 @@
 [
     {
         "origin": "Vienna",
-        "destination": "Agadir"
+        "destination": "Agadir",
+        "distance": 2960
     },
     {
         "origin": "Vienna",
-        "destination": "Stockholm"
+        "destination": "Marrakesh",
+        "distance": 2765
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Stockholm",
+        "distance": 1284
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Istabul",
+        "distance": 1250
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Muscat",
+        "distance": 4556
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Lisbon",
+        "distance": 2305
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Faro",
+        "distance": 2305
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Porto",
+        "distance": 2124
+    },
+    {
+        "origin": "Vienna",
+        "destination": "New York",
+        "distance": 6800
+    },
+    {
+        "origin": "Vienna",
+        "destination": "London",
+        "distance": 1270
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Palermo",
+        "distance": 1138
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Heraklion",
+        "distance": 1585
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Chania",
+        "distance": 1530
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Corfu",
+        "distance": 982
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Sardinia",
+        "distance": 1000
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Cairo",
+        "distance": 2363
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Riad",
+        "distance": 3677
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Edinburgh",
+        "distance": 1610
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Dublin",
+        "distance": 1700
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Beijing",
+        "distance": 7446
+    },
+    {
+        "origin": "Vienna",
+        "destination": "San Francisco",
+        "distance": 9648
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Madeira",
+        "distance": 3264
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Fuerteventura",
+        "distance": 3400
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Tenerife",
+        "distance": 3611
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Gran Canaria",
+        "distance": 3542
     }
 ]

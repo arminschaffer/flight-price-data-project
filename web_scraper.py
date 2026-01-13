@@ -134,7 +134,7 @@ def scrape_google_flights(url: str) -> pd.DataFrame:
                 )
                 driver.execute_script("arguments[0].click();", next_btn)
                 # Small buffer to prevent the browser from freezing
-                time.sleep(1) 
+                time.sleep(3) 
             except Exception as e:
                 logger.warning(f"Stopped at click {i+1}: {e}")
                 break
@@ -181,7 +181,6 @@ def scrape_google_flights(url: str) -> pd.DataFrame:
 
 
 def edit_flight_data(df: pd.DataFrame) -> pd.DataFrame:
-    df['departure_date'] = pd.to_datetime(df['departure_date'])
     df['scraped_at'] = datetime.now().strftime('%Y-%m-%d')
 
     return df

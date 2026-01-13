@@ -16,6 +16,8 @@ class Search(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     origin: Mapped[str] = mapped_column(String(100), nullable=False)
     destination: Mapped[str] = mapped_column(String(100), nullable=False)
+    distance: Mapped[int] = mapped_column(Integer, nullable=False)  # distance in km
+    
     
     # Note: datetime.now is passed as a function (no parentheses)
     created_at: Mapped[Date] = mapped_column(Date, default=datetime.now)
@@ -27,7 +29,7 @@ class Search(Base):
 
     __table_args__ = (
         UniqueConstraint(
-            'origin', 'destination',
+            'origin', 'destination', 'distance',
             name='_search_params_uc'
         ),
     )
