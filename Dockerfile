@@ -22,3 +22,5 @@ COPY . .
 # Environment variables for Selenium to find Chromium on Linux
 ENV CHROME_BIN=/usr/bin/chromium
 ENV CHROMEDRIVER_PATH=/usr/bin/chromedriver
+
+CMD ["uv", "run", "main.py"]
