@@ -1,5 +1,6 @@
 # 🛫 Flight Price Data Project
 A automated flight data scraper from Google Flight build in Python, Selenium and SQLAlchemy. It features a daily scheduler, structured logging, and smart "stealth" browser configurations to scrape flight prices without manual intervention.
+This app is based on the flight price tracker app (https://github.com/arminschaffer/flight_price_tracker)
 
 ## ✨ Features
 Daily Automation: Scheduled to run every day at 10:00 AM using the schedule library.
