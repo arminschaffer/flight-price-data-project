@@ -97,7 +97,6 @@ podman build -t flight-data-scraper .
 # Run with Volume Mapping
 podman run -d \
   --name data-scraper \
-  --restart always \
   -v $(pwd)/flight_price_database.db:/app/flight_price_database.db:Z \
   -v $(pwd)/tracker.log:/app/tracker.log:Z \
   -v $(pwd)/searches.json:/app/searches.json:Z \
