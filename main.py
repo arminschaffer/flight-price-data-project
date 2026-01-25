@@ -103,7 +103,7 @@ def run_tracker():
         
 
 # Schedule the task
-schedule.every().day.at("11:00").do(run_tracker)
+schedule.every().day.at("06:00").do(run_tracker)
 
 if __name__ == "__main__":
     logger.info("Scheduler active. Waiting...")

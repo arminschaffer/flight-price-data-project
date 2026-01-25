@@ -99,6 +99,7 @@ podman run -d \
   --name data-scraper \
   -v $(pwd)/flight_price_database.db:/app/flight_price_database.db:Z \
   -v $(pwd)/tracker.log:/app/tracker.log:Z \
+  -v $(pwd)/scraper.log:/app/scraper.log:Z \
   -v $(pwd)/searches.json:/app/searches.json:Z \
   flight-data-scraper
 ```
