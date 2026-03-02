@@ -123,5 +123,30 @@
         "origin": "Vienna",
         "destination": "Gran Canaria",
         "distance": 3542
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Copenhagen",
+        "distance": 875
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Belgrad",
+        "distance": 463
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Barcelona",
+        "distance": 1370
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Madrid",
+        "distance": 1804
+    },
+    {
+        "origin": "Vienna",
+        "destination": "Seville",
+        "distance": 2171
     }
 ]

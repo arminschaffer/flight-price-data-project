@@ -186,6 +186,33 @@ def edit_flight_data(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def scrape_google_flights_with_retry(
+        url, departure_date, return_date=None, cheapest_flights_option=True, more_flights=False, max_retries=3
+        ):
+    """
+    Wraps the scraper with a retry loop.
+    """
+    for attempt in range(max_retries):
+        try:
+            result = scrape_google_flights(url)
+            
+            if result is not None and not result.empty:
+                return result
+            
+            logger.warning(f"Attempt {attempt + 1}: No flights found. Retrying...")
+            
+        except Exception as e:
+            logger.error(f"Attempt {attempt + 1} failed with error: {e}")
+        
+        wait_time = (attempt + 1) * 10  # exponential waiting (10, 20, 30)
+        if attempt < max_retries - 1:
+            logger.info(f"Waiting {wait_time}s before next attempt...")
+            time.sleep(wait_time)
+            
+    logger.error(f"All {max_retries} attempts failed.")
+    return []
+
+
 def get_flight_route_data(
         origin: str, 
         dest: str, 
